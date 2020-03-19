@@ -38,28 +38,26 @@ var stripeElements = function (setupIntent) {
     var button = document.getElementById("submit");
     button.addEventListener("click", function (event) {
         event.preventDefault();
-        changeLoadingState(true);
-        var email = document.getElementById("email").value;
-
-        stripe
-            .confirmCardSetup(setupIntent.client_secret, {
-                payment_method: {
-                    card: card,
-                    billing_details: {email: email}
+        console.log(clientSecret);
+        stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: card,
+            }
+        }).then(function (result) {
+            if (result.error) {
+                // Show error to your customer (e.g., insufficient funds)
+                console.log(result.error.message);
+            } else {
+                // The payment has been processed!
+                if (result.paymentIntent.status === 'succeeded') {
+                    // Show a success message to your customer
+                    // There's a risk of the customer closing the window before callback
+                    // execution. Set up a webhook or plugin to listen for the
+                    // payment_intent.succeeded event that handles any business critical
+                    // post-payment actions.
                 }
-            })
-            .then(function (result) {
-                if (result.error) {
-                    changeLoadingState(false);
-                    var displayError = document.getElementById("card-errors");
-                    displayError.textContent = result.error.message;
-                } else {
-                    // The PaymentMethod was successfully setup
-                    // Be sure to attach the PaymentMethod to a Customer as shown by
-                    // the server webhook in this sample
-                    orderComplete(stripe, setupIntent.client_secret);
-                }
-            });
+            }
+        });
     });
 };
 var getSetupIntent = function () {
