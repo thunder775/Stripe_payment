@@ -46,7 +46,7 @@ var stripeElements = function (setupIntent) {
         }).then(function (result) {
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
-                StripeChannel.postMessage('unsuccessful');
+                StripeChannel.postMessage(result.error.message);
 
                 console.log(result.error.message);
             } else {
