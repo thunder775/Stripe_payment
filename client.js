@@ -46,12 +46,14 @@ var stripeElements = function (setupIntent) {
         }).then(function (result) {
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
+                StripeChannel.postMessage('unsuccessful');
+
                 console.log(result.error.message);
             } else {
                 // The payment has been processed!
                 if (result.paymentIntent.status === 'succeeded') {
 
-                    StripeChannel.postMessage('Hello World being called from Javascript code');
+                    StripeChannel.postMessage('successful');
                     // Show a success message to your customer
                     // There's a risk of the customer closing the window before callback
                     // execution. Set up a webhook or plugin to listen for the
