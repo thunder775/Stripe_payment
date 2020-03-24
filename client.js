@@ -19,17 +19,19 @@ var stripeElements = function (setupIntent) {
         }
     };
 
-    var card = elements.create("card", {style: style});
-
-    card.mount("#card-element");
-
+    var cardNumber = elements.create("cardNumber", {style: style});
+    var expiryDate = elements.create("cardExpiry", {style: style});
+    var cvc = elements.create("cardCvc", {style: style});
+    cardNumber.mount("#card-Number");
+    expiryDate.mount("#card-Expiry");
+    cvc.mount("#card-Cvc");
     // Element focus ring
-    card.on("focus", function () {
+    cardNumber.on("focus", function () {
         var el = document.getElementById("card-element");
         el.classList.add("focused");
     });
 
-    card.on("blur", function () {
+    cardNumber.on("blur", function () {
         var el = document.getElementById("card-element");
         el.classList.remove("focused");
     });
@@ -38,10 +40,17 @@ var stripeElements = function (setupIntent) {
     var button = document.getElementById("submit");
     button.addEventListener("click", function (event) {
         event.preventDefault();
+
+        console.log('===========' + JSON.stringify(expiryDate));
         console.log(clientSecret);
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
-                card: card,
+                card: {
+                    number: cardNumber,
+                    exp_month: expiryDate,
+                    exp_year: expiryDate,
+                    cvc: cvc,
+                },
             }
         }).then(function (result) {
             if (result.error) {
