@@ -40,17 +40,11 @@ var stripeElements = function (setupIntent) {
     var button = document.getElementById("submit");
     button.addEventListener("click", function (event) {
         event.preventDefault();
-
-        console.log('===========' + JSON.stringify(expiryDate));
         console.log(clientSecret);
+
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
-                card: {
-                    number: cardNumber,
-                    exp_month: expiryDate,
-                    exp_year: expiryDate,
-                    cvc: cvc,
-                },
+                card: cardNumber,
             }
         }).then(function (result) {
             if (result.error) {
