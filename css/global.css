@@ -30,11 +30,11 @@ body {
     flex-direction: row;
     width: 100%;
     max-width: 980px;
-    padding: 48px;
+    padding: 12px;
     align-content: center;
     justify-content: center;
     height: auto;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     margin: 0 auto;
 }
 
