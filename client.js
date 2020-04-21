@@ -45,7 +45,8 @@ var stripeElements = function (setupIntent) {
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: cardNumber,
-            }
+            },
+            setup_future_usage: 'off_session'
         }).then(function (result) {
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
