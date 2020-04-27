@@ -39,6 +39,7 @@ var stripeElements = function (setupIntent) {
     // Handle payment submission when user clicks the pay button.
     var button = document.getElementById("submit");
     button.addEventListener("click", function (event) {
+        changeLoadingState(true);
         event.preventDefault();
         console.log(clientSecret);
 
@@ -48,6 +49,7 @@ var stripeElements = function (setupIntent) {
             },
             setup_future_usage: 'off_session'
         }).then(function (result) {
+            changeLoadingState(false);
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
                 StripeChannel.postMessage(result.error.message);
