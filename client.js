@@ -1,11 +1,15 @@
 let publicKey = 'pk_test_jTcvZUaY0zm2YBTKixbaWZI700OFTYDBaK';
 
-
 var stripeElements = function (setupIntent) {
     var stripe = Stripe(publicKey);
     var elements = stripe.elements();
 
+    let cardNumberHasError = true;
+    let cardExpiryHasError = true;
+    let cardCVCHasError = true;
+
     // Element styles
+
     var style = {
         base: {
             fontSize: "16px",
@@ -35,21 +39,32 @@ var stripeElements = function (setupIntent) {
         var el = document.getElementById("card-element");
         el.classList.remove("focused");
     });
+    cardNumber.on("change", (e) => {
+        cardNumberHasError = !!e.error;
+    });
+    expiryDate.on("change", (e) => {
+        cardExpiryHasError = !!e.error;
+    });
+    cvc.on("change", (e) => {
+        cardCVCHasError = !!e.error;
+    });
 
     // Handle payment submission when user clicks the pay button.
     var button = document.getElementById("submit");
     button.addEventListener("click", function (event) {
-        changeLoadingState(true);
-        event.preventDefault();
-        console.log(clientSecret);
+        console.log()
 
+        if (!cardNumberHasError && !cardCVCHasError && !cardExpiryHasError) {
+            changeLoadingState(true);
+        }
+        event.preventDefault();
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: cardNumber,
             },
             setup_future_usage: 'off_session'
         }).then(function (result) {
-            changeLoadingState(false);
+
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
                 StripeChannel.postMessage(result.error.message);
@@ -58,7 +73,7 @@ var stripeElements = function (setupIntent) {
             } else {
                 // The payment has been processed!
                 if (result.paymentIntent.status === 'succeeded') {
-
+                    changeLoadingState(false);
                     StripeChannel.postMessage('successful');
                     // Show a success message to your customer
                     // There's a risk of the customer closing the window before callback
