@@ -72,7 +72,7 @@ var stripeElements = function (setupIntent) {
             } else {
                 // The payment has been processed!
                 if (result.paymentIntent.status === 'succeeded') {
-                    // changeLoadingState(false);
+                    // changeLoadingState(false) ;
                     console.log(JSON.stringify(result));
                     StripeChannel.postMessage('successful');
                     // Show a success message to your customer
