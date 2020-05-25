@@ -73,8 +73,8 @@ var stripeElements = function (setupIntent) {
                 // The payment has been processed!
                 if (result.paymentIntent.status === 'succeeded') {
                     // changeLoadingState(false);
-
-                    StripeChannel.postMessage(['successful',result.charges.data[0].receipt_url]);
+                    console.log(JSON.stringify(result));
+                    StripeChannel.postMessage('successful');
                     // Show a success message to your customer
                     // There's a risk of the customer closing the window before callback
                     // execution. Set up a webhook or plugin to listen for the
