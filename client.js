@@ -63,7 +63,7 @@ var stripeElements = function (setupIntent) {
                 card: cardNumber,
             },
             setup_future_usage: 'off_session'
-        }).then(function (result) {
+        }).then(async function (result) {
 
             if (result.error) {
                 // Show error to your customer (e.g., insufficient funds)
@@ -74,7 +74,7 @@ var stripeElements = function (setupIntent) {
                 if (result.paymentIntent.status === 'succeeded') {
                     // changeLoadingState(false);
 
-                    StripeChannel.postMessage(result.paymentIntent);
+                    StripeChannel.postMessage(['successful',result.charges.data[0].receipt_url]);
                     // Show a success message to your customer
                     // There's a risk of the customer closing the window before callback
                     // execution. Set up a webhook or plugin to listen for the
